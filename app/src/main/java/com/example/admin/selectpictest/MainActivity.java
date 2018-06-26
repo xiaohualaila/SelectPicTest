@@ -63,53 +63,6 @@ public class MainActivity extends AppCompatActivity {
         photo_rv.setAdapter(adapter);
 
     }
-    String[] permissions = new String[]{
-            Manifest.permission.CAMERA,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_PHONE_STATE};
-    List<String> mPermissionList = new ArrayList<>();
-    /**
-     * 检查申请权限
-     */
-
-    private void requestPermission() {
-        mPermissionList.clear();
-        for (int i = 0; i < permissions.length; i++) {
-            if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
-                mPermissionList.add(permissions[i]);
-            }
-        }
-        /**
-         * 判断是否为空
-         */
-        if (mPermissionList.size()==0) {//未授予的权限为空，表示都授予了
-            GalleryPick.getInstance().setGalleryConfig( galleryConfig ).open( this );
-        } else {//请求权限方法
-            String[] permissions = mPermissionList.toArray(new String[mPermissionList.size()]);//将List转为数组
-            ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST_READ_CONTACTS);
-        }
-    }
-
-
-
-
-    /**
-     * 申请权限返回结果
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == PERMISSIONS_REQUEST_READ_CONTACTS){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.i(TAG, "同意授权");
-                // 进行正常操作。
-                GalleryPick.getInstance().setGalleryConfig( galleryConfig ).open( this );
-
-            } else {
-                Log.i(TAG, "拒绝授权");
-            }
-        }
-    }
 
     /**
      * 图片的初始化
@@ -162,5 +115,51 @@ public class MainActivity extends AppCompatActivity {
                 .isShowCamera( true )                     // 是否现实相机按钮  默认：false
                 .filePath( "/" + getPackageName() + "/pic" )          // 图片存放路径
                 .build();
+    }
+
+    String[] permissions = new String[]{
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_PHONE_STATE};
+    List<String> mPermissionList = new ArrayList<>();
+
+    /**
+     * 检查申请权限
+     */
+    private void requestPermission() {
+        mPermissionList.clear();
+        for (int i = 0; i < permissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
+                mPermissionList.add(permissions[i]);
+            }
+        }
+        /**
+         * 判断是否为空
+         */
+        if (mPermissionList.size()==0) {//未授予的权限为空，表示都授予了
+            GalleryPick.getInstance().setGalleryConfig( galleryConfig ).open( this );
+        } else {//请求权限方法
+            String[] permissions = mPermissionList.toArray(new String[mPermissionList.size()]);//将List转为数组
+            ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST_READ_CONTACTS);
+        }
+    }
+
+
+    /**
+     * 申请权限返回结果
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == PERMISSIONS_REQUEST_READ_CONTACTS){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.i(TAG, "同意授权");
+                // 进行正常操作。
+                GalleryPick.getInstance().setGalleryConfig( galleryConfig ).open( this );
+
+            } else {
+                Log.i(TAG, "拒绝授权");
+            }
+        }
     }
 }
