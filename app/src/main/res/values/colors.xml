@@ -3,4 +3,5 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <!--<color name="gallery_blue">#ff8f00</color>用于自己设置选择图片状态栏颜色-->
 </resources>

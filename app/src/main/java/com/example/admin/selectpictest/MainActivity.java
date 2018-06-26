@@ -63,26 +63,39 @@ public class MainActivity extends AppCompatActivity {
         photo_rv.setAdapter(adapter);
 
     }
+    String[] permissions = new String[]{
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_PHONE_STATE};
+    List<String> mPermissionList = new ArrayList<>();
+    /**
+     * 检查申请权限
+     */
 
     private void requestPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "需要授权 ");
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                Log.i(TAG, "拒绝过了");
-                // 提示用户如果想要正常使用，要手动去设置中授权。
-                Toast.makeText(this, "请在 设置-应用管理 中开启此应用的储存授权。", Toast.LENGTH_SHORT).show();
-            } else {
-                Log.i(TAG, "进行授权");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_READ_CONTACTS);
+        mPermissionList.clear();
+        for (int i = 0; i < permissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
+                mPermissionList.add(permissions[i]);
             }
-        } else {
-            Log.i(TAG, "不需要授权 ");
-            // 进行正常操作
+        }
+        /**
+         * 判断是否为空
+         */
+        if (mPermissionList.size()==0) {//未授予的权限为空，表示都授予了
             GalleryPick.getInstance().setGalleryConfig( galleryConfig ).open( this );
+        } else {//请求权限方法
+            String[] permissions = mPermissionList.toArray(new String[mPermissionList.size()]);//将List转为数组
+            ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST_READ_CONTACTS);
         }
     }
 
 
+
+
+    /**
+     * 申请权限返回结果
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -139,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         galleryConfig = new GalleryConfig.Builder()
                 .imageLoader( new HelpGlideImageLoader())    // ImageLoader 加载框架（必填）
                 .iHandlerCallBack( iHandlerCallBack )     // 监听接口（必填）
-                .provider( "com.hz.junxinbaoan.fileProvider" )   // provider(必填)
+                .provider( "com.example.admin.selectpictest.fileprovider" )   // provider(必填)
                 .pathList( path )                         // 记录已选的图片
                 .multiSelect( true )                      // 是否多选   默认：false
                 .multiSelect( true, 9 )                   // 配置是否多选的同时 配置多选数量   默认：false ， 9
