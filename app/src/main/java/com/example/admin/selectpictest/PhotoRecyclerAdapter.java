@@ -12,6 +12,9 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Administrator on 2017/10/20 0020.
  */
@@ -72,13 +75,13 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<PhotoRecyclerAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView image,del;
-
+        @BindView(R.id.image)
+        ImageView image;
+        @BindView(R.id.del)
+        ImageView del;
         public ViewHolder(View itemView) {
             super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.image);
-            del = (ImageView) itemView.findViewById(R.id.del);
+            ButterKnife.bind(this, itemView);
         }
     }
 
